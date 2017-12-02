@@ -13,8 +13,14 @@ public class Post {
         this.created = created;
     }
 
+    public Post() {}
+
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Date getCreated() {

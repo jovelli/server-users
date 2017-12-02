@@ -1,6 +1,7 @@
 package com.rest.services.dao;
 
 import com.rest.services.beans.Post;
+import com.rest.services.beans.UserPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,10 +51,27 @@ public class PostDao {
         return Optional.empty();
     }
 
-    public List<Post> findAll() {
-        List<Post> allPosts = new ArrayList<>();
-        posts.forEach((userIdd, userPosts) -> allPosts.addAll(userPosts));
+    public List<UserPost> findAll() {
+        List<UserPost> allPosts = new ArrayList<>();
+
+        posts.forEach((userId, userPosts) -> allPosts.add(
+                new UserPost(userDao.findBy(userId).get(), userPosts))
+        );
         return allPosts;
+    }
+
+    public Optional<Post> save(String userId, Post post) {
+        List<Post> userPosts = posts.get(userId);
+
+        if (userPosts == null) {
+            userPosts = new ArrayList();
+        }
+
+        post.setId(String.valueOf(userPosts.size() + 1));
+        userPosts.add(post);
+        posts.put(userId, userPosts);
+
+        return Optional.of(post);
     }
 
 }

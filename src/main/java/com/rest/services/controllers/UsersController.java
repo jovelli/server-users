@@ -5,7 +5,7 @@ import java.util.List;
 import com.rest.services.beans.User;
 import com.rest.services.dao.UserDao;
 import com.rest.services.exceptions.UserNotFoundException;
-import com.rest.services.exceptions.UserNotValidException;
+import com.rest.services.exceptions.InvalidUserException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class UsersController {
-	  	
+
     @Autowired
     private UserDao userDao;
 
@@ -44,7 +44,7 @@ public class UsersController {
 
     @PostMapping(path="/users")
     public ResponseEntity create(@RequestBody User user) {
-        if (user.getName().equals("")) throw new UserNotValidException("Invalid user Name");
+        if (user.getName().equals("")) throw new InvalidUserException("Invalid user Name");
 
         return userDao.save(user).map(userSaved ->
             ResponseEntity.created(
@@ -59,6 +59,14 @@ public class UsersController {
         );
     }
 
+    @DeleteMapping("/users/{userId}")
+    public ResponseEntity deleteUser(@PathVariable String userId) {
+        return userDao.deleteBy(userId).map(userDeleted ->
+            ResponseEntity.noContent().build()
+        ).orElseThrow(
+            () -> new UserNotFoundException("User doesn't exist")
+        );
+    }
 
 
 }

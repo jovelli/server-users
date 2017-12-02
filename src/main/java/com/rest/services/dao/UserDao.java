@@ -3,10 +3,7 @@ package com.rest.services.dao;
 import org.springframework.stereotype.Component;
 import com.rest.services.beans.User;
 
-import java.util.Date;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class UserDao {
@@ -36,6 +33,21 @@ public class UserDao {
         user.setId(String.valueOf(users.size() + 1));
         users.add(user);
         return Optional.of(user);
+    }
+
+    public Optional<User> deleteBy(String userId) {
+        Iterator<User> iterator = users.iterator();
+
+        while ( iterator.hasNext() ) {
+            User user = iterator.next();
+
+            if (user.getId().equals(userId)) {
+                iterator.remove();
+                return Optional.of(user);
+            }
+        }
+
+        return Optional.empty();
     }
 }
 
