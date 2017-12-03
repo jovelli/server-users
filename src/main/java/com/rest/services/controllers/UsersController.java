@@ -2,14 +2,17 @@ package com.rest.services.controllers;
 
 import java.util.Date;
 import java.util.List;
+import javax.validation.Valid;
 import com.rest.services.beans.User;
 import com.rest.services.dao.UserDao;
 import com.rest.services.exceptions.UserNotFoundException;
-import com.rest.services.exceptions.InvalidUserException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.hateoas.Resource;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import org.springframework.hateoas.Link;
 
 @RestController
 public class UsersController {
@@ -37,15 +40,18 @@ public class UsersController {
     }
 
     @GetMapping("/users/{id}")
-    public User retrieveUser(@PathVariable String id)
+    public Resource<User> retrieveUser(@PathVariable String id)
     {
-        return userDao.findBy(id).orElseThrow(() -> new UserNotFoundException("User doesn't exist"));
+        Resource<User> resource = new Resource(userDao.findBy(id).orElseThrow(() -> new UserNotFoundException("User doesn't exist")));
+
+        Link linkTo = linkTo(methodOn(this.getClass()).retrieveAll()).withRel("all-users");
+        resource.add(linkTo);
+
+        return resource;
     }
 
     @PostMapping(path="/users")
-    public ResponseEntity create(@RequestBody User user) {
-        if (user.getName().equals("")) throw new InvalidUserException("Invalid user Name");
-
+    public ResponseEntity create(@Valid @RequestBody User user) {
         return userDao.save(user).map(userSaved ->
             ResponseEntity.created(
                 ServletUriComponentsBuilder
@@ -67,6 +73,5 @@ public class UsersController {
             () -> new UserNotFoundException("User doesn't exist")
         );
     }
-
 
 }

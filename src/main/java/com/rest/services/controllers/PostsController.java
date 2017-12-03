@@ -1,13 +1,13 @@
 package com.rest.services.controllers;
 
 import java.util.List;
+import javax.validation.Valid;
+
 import com.rest.services.beans.Post;
 import com.rest.services.beans.UserPost;
 import com.rest.services.dao.PostDao;
 import com.rest.services.dao.UserDao;
 import com.rest.services.exceptions.PostNotFoundException;
-import com.rest.services.exceptions.InvalidPostException;
-import com.rest.services.exceptions.UserNotFoundException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,11 +42,7 @@ public class PostsController {
     }
 
     @PostMapping("/users/{userId}/posts")
-    public ResponseEntity handlePost(@PathVariable String userId, @RequestBody Post post) {
-        if (post.getMessage().equals("")) throw new InvalidPostException("Post must have a message");
-
-        userDao.findBy(userId).orElseThrow(() -> new UserNotFoundException("User doesn't exist"));
-
+    public ResponseEntity handlePost(@PathVariable String userId, @Valid @RequestBody Post post) {
         return postDao.save(userId, post).map(savedPost ->
             ResponseEntity.created(ServletUriComponentsBuilder.
                 fromCurrentRequest().
