@@ -1,12 +1,19 @@
 package com.rest.services.beans;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Entity
 public class Post {
-    private String id;
+
+    @Id
+    @SequenceGenerator(name="post_sequence", sequenceName="POSTSEQUENCE", allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="post_sequence")
+    private Long id;
 
     @Size(min=2, message="Message must have at least 2 characters")
     private String message;
@@ -15,7 +22,11 @@ public class Post {
     @NotNull(message="Created date must not be empty")
     private Date createdDate;
 
-    public Post(String id, String message, Date createdDate) {
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JsonIgnore
+    private User user;
+
+    public Post(Long id, String message, Date createdDate) {
         this.id = id;
         this.message = message;
         this.createdDate = createdDate;
@@ -23,19 +34,19 @@ public class Post {
 
     public Post() {}
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getMessage() {
+        return message;
     }
 
     public Date getCreatedDate() {
         return createdDate;
     }
 
-    public String getMessage() {
-        return message;
+    public void setUser(User user) {
+        this.user = user;
     }
 }
