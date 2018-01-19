@@ -11,24 +11,27 @@ import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import org.hibernate.annotations.Type;
 
 @ApiModel(description="User's definition")
 @JsonFilter("UsersFilter")
 @Entity
+@Table(name = "USERS")
 public class User {
 
     @Id
-    @SequenceGenerator(name="user_sequence", sequenceName="USERSEQUENCE", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="user_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Size(min=2, message="Name must have at least 2 characters")
     @ApiModelProperty(notes="Name must have at least 2 characters")
+    @NotNull
     private String name;
 
     @Past(message="BirthDate must be in the past")
     @NotNull(message="BirthDate must not be empty")
     @ApiModelProperty(notes="BirthDate must not be empty")
+    @Type(type = "org.hibernate.type.TimestampType")
     private Date birthDate;
 
     private String nationalId;
@@ -85,3 +88,6 @@ public class User {
                 '}';
     }
 }
+
+
+

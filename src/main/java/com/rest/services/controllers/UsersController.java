@@ -4,6 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
@@ -12,6 +17,7 @@ import com.rest.services.beans.User;
 import com.rest.services.dao.PostRepository;
 import com.rest.services.dao.UserRepository;
 import com.rest.services.exceptions.UserNotFoundException;
+import org.hibernate.SessionFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +30,7 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 
 @RestController
+@Transactional
 public class UsersController {
 
     private static final String[] FILTER_ALL_USERS = {"name", "birthDate"};
@@ -32,6 +39,13 @@ public class UsersController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+//    private EntityManagerFactory emf = EntityManagerFactory.
+    private EntityManager entityManager ;
+
+
+    //private SessionFactory sessionFactory = entityManager.;
 
     @Autowired
     private PostRepository postRepository;
@@ -89,6 +103,10 @@ public class UsersController {
 
     @PostMapping(path="/users")
     public ResponseEntity create(@Valid @RequestBody User user) {
+
+        entityManager.persist(user);
+        entityManager.close();
+
         return Optional.of(userRepository.save(user)).map(userSaved ->
             ResponseEntity.created(
                 ServletUriComponentsBuilder

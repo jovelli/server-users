@@ -38,6 +38,9 @@ public class ServerUsersApplication {
 		SpringApplication.run(ServerUsersApplication.class, args);
 	}
 
+
+
+
 	@Bean
 	public LocaleResolver getLocaleResolver() {
 		SessionLocaleResolver localeResolver = new SessionLocaleResolver();

@@ -1,0 +1,28 @@
+management.security.enabled: true
+
+security:
+  user:
+    name: user
+    password: pass
+
+spring:
+  jpa:
+    show-sql: true  #or properties.hibernate.show_sql: true
+    properties.hibernate.format_sql: true
+  h2.console.enabled: true
+
+logging:
+  level:
+    org.hibernate.type: TRACE
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://host:port/db
+    username: user
+    password: pass
+
+  jpa:
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate.ddl_auto: create
+

@@ -8,11 +8,11 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "POSTS")
 public class Post {
 
     @Id
-    @SequenceGenerator(name="post_sequence", sequenceName="POSTSEQUENCE", allocationSize=1)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="post_sequence")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(min=2, message="Message must have at least 2 characters")

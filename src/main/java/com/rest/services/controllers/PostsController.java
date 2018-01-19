@@ -8,7 +8,6 @@ import com.rest.services.beans.Post;
 import com.rest.services.beans.User;
 import com.rest.services.dao.PostRepository;
 import com.rest.services.dao.UserRepository;
-import com.rest.services.exceptions.PostNotFoundException;
 import com.rest.services.exceptions.UserNotFoundException;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,7 +49,7 @@ public class PostsController {
             }
         }
 
-        return ResponseEntity.notFound().build(); //postDao.findBy(userId, postId).orElseThrow(() -> new PostNotFoundException("Post not found"));
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/users/{userId}/posts")
