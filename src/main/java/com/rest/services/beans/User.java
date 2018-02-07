@@ -78,6 +78,18 @@ public class User {
 
     public void setPosts(List<Post> posts) { this.posts = posts; }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void setNationalId(String nationalId) {
+        this.nationalId = nationalId;
+    }
+
     @Override
     public String toString() {
         return "User{" +

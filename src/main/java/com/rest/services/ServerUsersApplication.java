@@ -3,20 +3,20 @@ package com.rest.services;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.service.StringVendorExtension;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.StringVendorExtension;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.service.Contact;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -37,9 +37,6 @@ public class ServerUsersApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ServerUsersApplication.class, args);
 	}
-
-
-
 
 	@Bean
 	public LocaleResolver getLocaleResolver() {
